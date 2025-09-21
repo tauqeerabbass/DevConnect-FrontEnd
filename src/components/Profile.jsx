@@ -1,9 +1,11 @@
 import React from 'react'
+import ProfileEditor from './ProfileEditor'
+import UserCard from './userCard'
 
 const Profile = () => {
   return (
     <div>
-      This is Profile Page
+      <ProfileEditor />
     </div>
   )
 }
