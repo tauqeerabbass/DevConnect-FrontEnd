@@ -11,10 +11,10 @@ const ProfileEditor = () => {
 
   const [formData, setFormData] = useState(user || {});
   const [errors, setErrors] = useState({});
-  const [status, setStatus] = useState("idle"); // 'idle' | 'loading' | 'succeeded' | 'failed'
+  const [status, setStatus] = useState("idle");
   const [message, setMessage] = useState(null);
 
-  // Sync formData with the Redux user state
+
   useEffect(() => {
     setFormData(user || {});
   }, [user]);
@@ -55,7 +55,7 @@ const ProfileEditor = () => {
     try {
       const { age, bio, firstName, lastName, gender } = formData;
 
-      // Replace with your actual API endpoint
+      
       const response = await axios.patch(
         `${BASE_URL}/profile/edit`,
         { firstName, lastName, age, gender, bio },
@@ -65,7 +65,7 @@ const ProfileEditor = () => {
       const updatedUser = response.data;
       dispatch(addUser(updatedUser));
       setStatus("succeeded");
-      setMessage({ type: "success", text: "Profile updated successfully! ✨" }); // Dispatch the action with the updated data from the server
+      setMessage({ type: "success", text: "Profile updated successfully! ✨" });
 
       setStatus("succeeded");
       setMessage({ type: "success", text: "Profile updated successfully! ✨" });
@@ -100,7 +100,7 @@ const ProfileEditor = () => {
           </h1>
         </div>
 
-        {/* Display messages based on local state */}
+
         {status === "loading" && (
           <div className="p-4 rounded-lg text-sm mb-6 font-medium text-center bg-gray-700 text-gray-300">
             Updating profile...
@@ -119,7 +119,7 @@ const ProfileEditor = () => {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Form fields remain the same as previous examples */}
+          
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
               <label
