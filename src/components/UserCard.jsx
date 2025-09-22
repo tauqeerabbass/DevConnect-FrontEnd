@@ -1,6 +1,6 @@
 import React from 'react';
 
-const UserCard = ({ user }) => {
+const UserCard = ({ user, onAccept, onIgnore }) => {
   const { firstName, lastName, bio, age, gender, photoUrl } = user;
 
   return (
@@ -24,10 +24,16 @@ const UserCard = ({ user }) => {
           )}
           <p className="text-gray-300 text-base mb-4">{bio}</p>
           <div className="flex justify-center space-x-4">
-            <button className="bg-gray-700 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-200">
+            <button
+              className="bg-gray-700 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-200"
+              onClick={onIgnore}
+            >
               Ignore
             </button>
-            <button className="bg-teal-500 hover:bg-teal-600 text-gray-900 font-bold py-2 px-6 rounded-lg transition-colors duration-200">
+            <button
+              className="bg-teal-500 hover:bg-teal-600 text-gray-900 font-bold py-2 px-6 rounded-lg transition-colors duration-200"
+              onClick={onAccept}
+            >
               Interested
             </button>
           </div>
