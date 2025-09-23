@@ -4,6 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
 import { removeUser } from "../utils/userSlice";
+import { removeFeed } from "../utils/feedSlice";
+import { removeConnection } from "../utils/connectionSlice";
+import { removeRequest } from "../utils/request";
 
 const NavBar = () => {
   const user = useSelector((store) => store.user);
@@ -15,6 +18,9 @@ const NavBar = () => {
     try {
       await axios.post(BASE_URL + "/logout", {}, { withCredentials: true });
       dispatch(removeUser());
+      dispatch(removeFeed());
+      dispatch(removeConnection());
+      dispatch(removeRequest());
       navigate("/login");
     } catch (error) {
       console.log("Error during logout:", error.message);

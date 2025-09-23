@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { addUser } from "../utils/userSlice";
 import { BASE_URL } from "../utils/constants";
 import { FaUserCircle } from "react-icons/fa";
+import { removeFeed } from "../utils/feedSlice";
+import { removeConnection } from "../utils/connectionSlice";
+import { removeRequest } from "../utils/request";
 
 const LoginSignup = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -78,6 +81,10 @@ const LoginSignup = () => {
         { withCredentials: true }
       );
       dispatch(addUser(res.data.data));
+      // Clear stale state so new user's data is fetched fresh
+      dispatch(removeFeed());
+      dispatch(removeConnection());
+      dispatch(removeRequest());
       navigate(successRedirect);
     } catch (err) {
       const errorMessage = err?.response?.data?.message || (isLogin ? "Login failed. Please check your credentials." : "Signup failed. Please try again.");
