@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
-import UserCard from "./userCard";
+import UserCard from "./UserCard";
 
 const ProfileEditor = () => {
   const dispatch = useDispatch();
@@ -62,11 +62,8 @@ const ProfileEditor = () => {
         { withCredentials: true }
       );
 
-      const updatedUser = response.data;
+      const updatedUser = response.data?.data;
       dispatch(addUser(updatedUser));
-      setStatus("succeeded");
-      setMessage({ type: "success", text: "Profile updated successfully! ✨" });
-
       setStatus("succeeded");
       setMessage({ type: "success", text: "Profile updated successfully! ✨" });
     } catch (err) {
@@ -269,7 +266,7 @@ const ProfileEditor = () => {
           </button>
         </form>
       </div>
-      <UserCard user={user} />
+      <UserCard user={user} showActions={false} />
     </div>
   );
 };

@@ -32,68 +32,87 @@ const LoginSignup = () => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const passwordRegex = /.{6,}/;
 
-  const handleAuth = async (e) => {
-    e.preventDefault();
-    setError("");
-    setIsLoading(true);
+  // Inside LoginSignup.jsx
 
-    if (!email || !password) {
+const handleAuth = async (e) => {
+  e.preventDefault();
+  setError("");
+  setIsLoading(true);
+
+  if (!email || !password) {
       setError("Email and password are required.");
       setIsLoading(false);
       return;
-    }
+  }
 
-    if (!emailRegex.test(email)) {
+  if (!emailRegex.test(email)) {
       setError("Please enter a valid email address.");
       setIsLoading(false);
       return;
-    }
+  }
 
-    if (!passwordRegex.test(password)) {
+  if (!passwordRegex.test(password)) {
       setError("Password must be at least 6 characters long.");
       setIsLoading(false);
       return;
-    }
+  }
 
-    if (!isLogin) {
-      if (!firstName || !lastName) { // Added validation for signup fields
-        setError("First name and last name are required.");
-        setIsLoading(false);
-        return;
+  if (!isLogin) {
+      if (!firstName || !lastName) {
+          setError("First name and last name are required.");
+          setIsLoading(false);
+          return;
       }
       if (password !== confirmPassword) {
-        setError("Passwords do not match.");
-        setIsLoading(false);
-        return;
+          setError("Passwords do not match.");
+          setIsLoading(false);
+          return;
       }
-    }
+  }
 
-    const endpoint = isLogin ? "/login" : "/signup";
-    const payload = isLogin 
+  const endpoint = isLogin ? "/login" : "/signup";
+  const payload = isLogin 
       ? { email, password } 
-      : { email, password, confirmPassword, firstName, lastName }; // Updated payload
-    const successRedirect = isLogin ? "/" : "/profile";
+      : { email, password, confirmPassword, firstName, lastName }; 
+      
+  // Always redirect to the main feed page ("/") after successful login or signup
+  const successRedirect = "/"; 
 
-    try {
+  try {
       const res = await axios.post(
-        BASE_URL + endpoint,
-        payload,
-        { withCredentials: true }
+          BASE_URL + endpoint,
+          payload,
+          { withCredentials: true }
       );
-      dispatch(addUser(res.data.data));
-      // Clear stale state so new user's data is fetched fresh
+      
+      // 🚀 CRITICAL FIX: Correctly extract user data based on the endpoint.
+      // Login returns user object directly (res.data).
+      // Signup returns user object nested under 'data' (res.data.data).
+      const userData = isLogin ? res.data : res.data.data;
+      
+      if (userData) {
+          dispatch(addUser(userData));
+      } else {
+          // Should not happen if backend is correct, but handles unexpected response
+          throw new Error("User data was not received from the server.");
+      }
+
+      // Clear stale state for a fresh start
       dispatch(removeFeed());
       dispatch(removeConnection());
       dispatch(removeRequest());
-      navigate(successRedirect);
-    } catch (err) {
+      
+      // Navigate to the main feed page
+      navigate(successRedirect); 
+      
+  } catch (err) {
       const errorMessage = err?.response?.data?.message || (isLogin ? "Login failed. Please check your credentials." : "Signup failed. Please try again.");
       setError(errorMessage);
       console.log("Auth error:", err);
-    } finally {
+  } finally {
       setIsLoading(false);
-    }
-  };
+  }
+};
 
   const toggleForm = () => {
     setIsLogin(!isLogin);

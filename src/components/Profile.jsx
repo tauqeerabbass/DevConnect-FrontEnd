@@ -1,6 +1,6 @@
 import React from 'react'
 import ProfileEditor from './ProfileEditor'
-import UserCard from './userCard'
+import UserCard from './UserCard'
 
 const Profile = () => {
   return (
